@@ -4,29 +4,31 @@
 
 namespace ariel{
 
-    Graph::Graph() : edges_count(0), vertices_count(0){
-        curr_graph = std::vector<std::vector<int>>();
+    ariel::Graph::Graph() : edges_count(0), vertices_count(0){
+        vector<vector<int>> curr_graph;
     }
 
-
+    //TODO: fix this so that the graph is loaded correctly (may need to use the "this" pointer)
     void Graph::loadGraph(std::vector<std::vector<int>> givenGraph){
-        if(givenGraph.size() == 0){
+        if(givenGraph.empty()){
             throw invalid_argument("The graph is empty");
         }
         if(givenGraph.size() != givenGraph[0].size()){
             throw invalid_argument("The graph is not a square matrix");
         }
 
-        curr_graph = givenGraph;
-        vertices_count = givenGraph.size();
-        edges_count = 0;
+        //this->curr_graph = givenGraph;
+        this->vertices_count = givenGraph.size();
+        int found_edges = 0;
         for(int i=0; i < vertices_count; i++){
             for(int j=0; j < vertices_count; j++){
+                curr_graph[i][j] = givenGraph[i][j];
                 if(curr_graph[i][j] != 0){
-                    edges_count++;
+                    found_edges++;
                 }
             }
         }
+        this->edges_count = found_edges;
 
     }
 

@@ -12,6 +12,7 @@ namespace ariel{
             static void dfs(Graph g, int start, vector<bool> &visited);
             static void bellmanFord(Graph g, int start, vector<int> &distances);
             static bool hasLoopbacks(Graph g);
+            int minDistance(vector<int> distances, vector<bool> visited);
             
         public:
             static bool isConnected(Graph g);
