@@ -1,11 +1,14 @@
+#ifndef GRAPH_H
+#define GRAPH_H
+
 #include "Graph.hpp"
 #include <iostream>
- using namespace std;
+using namespace std;
 
 namespace ariel{
 
-    ariel::Graph::Graph() : edges_count(0), vertices_count(0){
-        vector<vector<int>> curr_graph;
+    Graph::Graph() : edges_count(0), vertices_count(0){
+        std::vector<std::vector<int>> curr_graph;
     }
 
     //TODO: fix this so that the graph is loaded correctly (may need to use the "this" pointer)
@@ -17,7 +20,7 @@ namespace ariel{
             throw invalid_argument("The graph is not a square matrix");
         }
 
-        //this->curr_graph = givenGraph;
+        this->curr_graph = givenGraph;
         this->vertices_count = givenGraph.size();
         int found_edges = 0;
         for(int i=0; i < vertices_count; i++){
@@ -54,6 +57,8 @@ namespace ariel{
     }
 
     int Graph::getGraphValue(int i, int j){
-        return curr_graph[i][j];
+        return (int)curr_graph[(int)i][(int)j];
     }
 }
+
+#endif //GRAPH_H

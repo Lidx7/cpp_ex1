@@ -15,6 +15,7 @@ namespace ariel{
             int minDistance(vector<int> distances, vector<bool> visited);
             
         public:
+            Algorithms();
             static bool isConnected(Graph g);
             static string shortestPath(Graph g, int start, int end);
             static bool isContainsCycle(Graph g);

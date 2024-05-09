@@ -1,3 +1,5 @@
+
+
 #include "Algorithms.hpp"
 #include "Graph.hpp"
 
@@ -27,7 +29,7 @@ namespace ariel{
     }
 
     //TODO: make this function find the shortest path to "end" and not all vertices
-    static string shortestPath(ariel::Graph g, int start, int end){
+    static string shortestPath(Graph g, int start, int end){
         vector<int> distances = vector<int>(g.getVerticesCount(), INT32_MAX); //initializing the "distances" vector with the closest value we can get to infinity
         vector<bool> included_stp = vector<bool>(g.getVerticesCount(), false);
         distances[start] = 0;
@@ -43,7 +45,7 @@ namespace ariel{
             }
         }
 
-        //TODO: fix this to much only the end vertice and not all of them
+        //TODO: fix this to match only the end vertice and not all of them
         for(int i=0; i < g.getVerticesCount(); i++){
         string ans = "Shortest path from " + to_string(start) + " to all other vertices:\n";
             ans += to_string(distances[i]) + " ";
@@ -64,7 +66,7 @@ namespace ariel{
         return min_index;
     }
 
-    static bool isContainsCycle(ariel::Graph g){
+    static bool isContainsCycle(Graph g){
         vector<bool> visited = vector<bool>(g.getVerticesCount(), false);
         for(int i=0; i < g.getVerticesCount(); i++){
             if(!visited[i]){
@@ -81,7 +83,7 @@ namespace ariel{
         return false;
     }
 
-    static string isBipartite(ariel::Graph g){
+    static string isBipartite(Graph g){
         if(hasLoopbacks(g)){
             return "The graph is not bipartite";
         }
@@ -111,7 +113,7 @@ namespace ariel{
         return "The graph is bipartite";
     }
 
-    static string negativeCycle(ariel::Graph g){
+    static string negativeCycle(Graph g){
         vector<int> distances = vector<int>(g.getVerticesCount(), INT32_MAX); //initializing the "distances" vector with the closest value we can get to infinity
         bellmanFord(g, 0, distances);
 
@@ -131,7 +133,7 @@ namespace ariel{
      *   Helper functions   *
      ************************/
 
-    static void dfs(ariel::Graph g, int start, vector<bool> &visited){
+    static void dfs(Graph g, int start, vector<bool> &visited){
         visited[start] = true;
         for(int i=0; i < g.getVerticesCount(); i++){
             if(g.getGraphValue(start, i) != 0 && !visited[i]){
@@ -141,7 +143,7 @@ namespace ariel{
     }
 
     //Please note that before calling the function for the first time, the "distances" vector should be initialized with the maximum possible value
-    static void bellmanFord(ariel::Graph g, int start, vector<int> &distances){ //TODO: check if "distances" should be a 2D vector
+    static void bellmanFord(Graph g, int start, vector<int> &distances){ //TODO: check if "distances" should be a 2D vector
         distances[start] = 0;
         for(int i=0; i < g.getVerticesCount() - 1; i++){
             for(int j=0; j < g.getEdgesCount(); j++){
@@ -152,7 +154,7 @@ namespace ariel{
         }
     }
     
-    bool hasLoopbacks(ariel::Graph g){
+    bool hasLoopbacks(Graph g){
         for(int i=0; i < g.getVerticesCount(); i++){
             if(g.getGraphValue(i, i) != 0){
                 return true;
@@ -163,3 +165,4 @@ namespace ariel{
     }
 
 }
+

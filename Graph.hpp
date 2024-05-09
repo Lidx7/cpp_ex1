@@ -1,3 +1,6 @@
+#ifndef ALGORITHMS_HPP
+#define ALGORITHMS_HPP
+
 #include <iostream>
 #include <vector>
 
@@ -20,3 +23,5 @@ namespace ariel{
 
     };
 }
+
+#endif
