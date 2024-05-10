@@ -1,5 +1,4 @@
 
-
 #include "Algorithms.hpp"
 #include "Graph.hpp"
 
@@ -8,55 +7,57 @@
 #include <queue>
 
 using namespace std;
+using namespace ariel;
+
 
 /*TODO: ensure that all these functions also work on a weighted graph*/
-namespace ariel{
 
     Algorithms::Algorithms(){
         curr_graph = vector<vector<int>>();
     }
 
-    static bool isConnected(Graph g){
-        vector<bool> visited = vector<bool>(g.getVerticesCount(), false);
-        dfs(g, 0, visited);
-        for(int i=0; i < g.getVerticesCount(); i++){
-            if(!visited[i]){
-                return false;
+    /************************
+     *   Helper functions   *
+     ************************/
+
+    void Algorithms::dfs(Graph g, int s, vector<bool> &visited){
+        vector<int>::size_type start = (vector<int>::size_type)s;
+        visited[start] = true;
+        for(vector<int>::size_type i=0; i < g.getVerticesCount(); i++){
+            if(g.getGraphValue(start, i) != 0 && !visited[i]){
+                dfs(g, i, visited);
             }
         }
-
-        return true;
     }
 
-    //TODO: make this function find the shortest path to "end" and not all vertices
-    static string shortestPath(Graph g, int start, int end){
-        vector<int> distances = vector<int>(g.getVerticesCount(), INT32_MAX); //initializing the "distances" vector with the closest value we can get to infinity
-        vector<bool> included_stp = vector<bool>(g.getVerticesCount(), false);
+    //Please note that before calling the function for the first time, the "distances" vector should be initialized with the maximum possible value
+    void Algorithms::bellmanFord(Graph g, int s, vector<int> &distances){ //TODO: check if "distances" should be a 2D vector
+        vector<int>::size_type start = (vector<int>::size_type)s;
         distances[start] = 0;
-
-        for(int i=0; i < g.getVerticesCount() - 1; i++){
-            int u = minDistance(distances, included_stp);
-            included_stp[u] = true;
-
-            for(int j=0; j < g.getVerticesCount(); j++){
-                if(g.getGraphValue(u, j) != 0 && !included_stp[j] && distances[u] != INT32_MAX && distances[j] > distances[u] + g.getGraphValue(u, j)){
-                    distances[j] = distances[u] + g.getGraphValue(u, j);
+        for(vector<int>::size_type i=0; i < g.getVerticesCount() - 1; i++){
+            for(vector<int>::size_type j=0; j < g.getEdgesCount(); j++){
+                if(g.getGraphValue(i, j) != 0 && distances[j] > distances[i] + g.getGraphValue(i, j)){
+                    distances[j] = distances[i] + g.getGraphValue(i, j);
                 }
             }
         }
-
-        //TODO: fix this to match only the end vertice and not all of them
-        for(int i=0; i < g.getVerticesCount(); i++){
-        string ans = "Shortest path from " + to_string(start) + " to all other vertices:\n";
-            ans += to_string(distances[i]) + " ";
+    }
+    
+    bool Algorithms::hasLoopbacks(Graph g){
+        for(vector<int>::size_type i=0; i < g.getVerticesCount(); i++){
+            if(g.getGraphValue(i, i) != 0){
+                return true;
+            }
         }
+
+        return false;
     }
 
-    int minDistance(vector<int> distances, vector<bool> visited){
+    int Algorithms::minDistance(vector<int> distances, vector<bool> visited){
         int min = INT32_MAX;
         int min_index = -1;
 
-        for(int i=0; i < distances.size(); i++){
+        for(vector<int>::size_type i=0; i < distances.size(); i++){
             if(!visited[i] && distances[i] <= min){
                 min = distances[i];
                 min_index = i;
@@ -66,9 +67,63 @@ namespace ariel{
         return min_index;
     }
 
-    static bool isContainsCycle(Graph g){
+/************************************************************************************************************************/
+
+
+    bool Algorithms::isConnected(Graph g){
         vector<bool> visited = vector<bool>(g.getVerticesCount(), false);
-        for(int i=0; i < g.getVerticesCount(); i++){
+        dfs(g, 0, visited);
+        for(vector<bool>::size_type i=0; i < g.getVerticesCount(); i++){
+            if(!visited[i]){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    //TODO: make this function find the shortest path to "end" and not all vertices
+    string Algorithms::shortestPath(Graph g, int s, int e){
+        vector<int>::size_type start = (vector<int>::size_type)s;
+        vector<int>::size_type end = (vector<int>::size_type)e;
+        vector<int> distances = vector<int>(g.getVerticesCount(), INT32_MAX); //initializing the "distances" vector with the closest value we can get to infinity
+        vector<bool> included_stp = vector<bool>(g.getVerticesCount(), false);
+        distances[start] = 0;
+
+        for(vector<bool>::size_type i=0; i < g.getVerticesCount() - 1; i++){
+            vector<int>::size_type u = (vector<int>::size_type)minDistance(distances, included_stp);
+            included_stp[u] = true;
+
+            for(vector<int>::size_type j=0; j < g.getVerticesCount(); j++){
+                if(g.getGraphValue(u, j) != 0 && !included_stp[j] && distances[u] != INT32_MAX && distances[j] > distances[u] + g.getGraphValue(u, j)){
+                    distances[j] = distances[u] + g.getGraphValue(u, j);
+                }
+            }
+        }
+
+        string ans ="";
+        bool first = true;
+        for(vector<int>::size_type i=0; i < g.getVerticesCount(); i++){
+            if(distances[i] == INT32_MAX){
+                return "-1";
+            }
+            else if(first){
+                ans += (to_string(distances[i]));
+                first = false;
+            }
+            else{
+                ans += ("->" + to_string(distances[i]));
+
+            }
+        }
+
+        return ans;
+    }
+
+
+    bool Algorithms::isContainsCycle(Graph g){
+        vector<bool> visited = vector<bool>(g.getVerticesCount(), false);
+        for(vector<bool>::size_type i=0; i < g.getVerticesCount(); i++){
             if(!visited[i]){
                 dfs(g, i, visited); /*TODO: may need to fix the dfs function so it can detect if a 
                                     currently visited vetics is already found (meaning breaking the taget
@@ -83,7 +138,7 @@ namespace ariel{
         return false;
     }
 
-    static string isBipartite(Graph g){
+    string Algorithms::isBipartite(Graph g){
         if(hasLoopbacks(g)){
             return "The graph is not bipartite";
         }
@@ -94,31 +149,59 @@ namespace ariel{
         q.push(0);
 
         while(!q.empty()){
-            int curr = q.front();
+            vector<int>::size_type curr = (vector<int>::size_type)q.front();
             q.pop();
 
-            for(int i=0; i < g.getVerticesCount(); i++){
+            for(vector<int>::size_type i=0; i < g.getVerticesCount(); i++){
                 if(g.getGraphValue(curr, i) != 0){
                     if(color[i] == -1){
                         color[i] = 1 - color[curr];
                         q.push(i);
                     }       
                     else if(g.getGraphValue(curr, i) && color[i] == color[curr]){ /*TODO: check if the "getGraphValue" call is actually needed*/
-                        return "The graph is not bipartite";
+                        return "0";
                     }
                 }
             }
         }
 
-        return "The graph is bipartite";
+        string ans = "The graph is bipartite: A={";
+        bool first = true;
+        for(vector<int>::size_type i=0; i < g.getVerticesCount(); i++){
+            if(color[i] == 1){
+                if(first){
+                    ans += to_string(i);
+                    first = false;
+                }
+                else{
+                    ans += ", " + to_string(i);
+                }
+            }
+        }
+        ans += "}, B={";
+        first = true;
+        for(vector<int>::size_type i=0; i < g.getVerticesCount(); i++){
+            if(color[i] == 0){
+                if(first){
+                    ans += to_string(i);
+                    first = false;
+                }
+                else{
+                    ans += ", " + to_string(i);
+                }
+            }
+        }
+        ans += "}";
+
+        return ans;
     }
 
-    static string negativeCycle(Graph g){
+    string Algorithms::negativeCycle(Graph g){
         vector<int> distances = vector<int>(g.getVerticesCount(), INT32_MAX); //initializing the "distances" vector with the closest value we can get to infinity
         bellmanFord(g, 0, distances);
 
-        for(int i=0; i < g.getVerticesCount(); i++){
-            for(int j=0; j < g.getVerticesCount(); j++){
+        for(vector<int>::size_type i=0; i < g.getVerticesCount(); i++){
+            for(vector<int>::size_type j=0; j < g.getVerticesCount(); j++){
                 if(g.getGraphValue(i, j) != 0 && distances[j] > distances[i] + g.getGraphValue(i, j)){
                     return "The graph contains a negative cycle";
                     
@@ -129,40 +212,7 @@ namespace ariel{
         return "The graph does not have a negative cycle";
     }
 
-    /************************
-     *   Helper functions   *
-     ************************/
-
-    static void dfs(Graph g, int start, vector<bool> &visited){
-        visited[start] = true;
-        for(int i=0; i < g.getVerticesCount(); i++){
-            if(g.getGraphValue(start, i) != 0 && !visited[i]){
-                dfs(g, i, visited);
-            }
-        }
-    }
-
-    //Please note that before calling the function for the first time, the "distances" vector should be initialized with the maximum possible value
-    static void bellmanFord(Graph g, int start, vector<int> &distances){ //TODO: check if "distances" should be a 2D vector
-        distances[start] = 0;
-        for(int i=0; i < g.getVerticesCount() - 1; i++){
-            for(int j=0; j < g.getEdgesCount(); j++){
-                if(g.getGraphValue(i, j) != 0 && distances[j] > distances[i] + g.getGraphValue(i, j)){
-                    distances[j] = distances[i] + g.getGraphValue(i, j);
-                }
-            }
-        }
-    }
     
-    bool hasLoopbacks(Graph g){
-        for(int i=0; i < g.getVerticesCount(); i++){
-            if(g.getGraphValue(i, i) != 0){
-                return true;
-            }
-        }
 
-        return false;
-    }
 
-}
 

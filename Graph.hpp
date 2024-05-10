@@ -1,5 +1,5 @@
-#ifndef ALGORITHMS_HPP
-#define ALGORITHMS_HPP
+#ifndef GRAPH_HPP
+#define GRAPH_HPP
 
 #include <iostream>
 #include <vector>
@@ -17,8 +17,8 @@ namespace ariel{
             Graph();
             void loadGraph(std::vector<std::vector<int>> graph);
             void printGraph();
-            int getEdgesCount();
-            int getVerticesCount();
+            vector<int>::size_type getEdgesCount();
+            vector<int>::size_type getVerticesCount();
             int getGraphValue(int i, int j);
 
     };

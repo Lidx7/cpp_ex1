@@ -1,11 +1,8 @@
-#ifndef GRAPH_H
-#define GRAPH_H
-
 #include "Graph.hpp"
 #include <iostream>
 using namespace std;
 
-namespace ariel{
+using namespace ariel;
 
     Graph::Graph() : edges_count(0), vertices_count(0){
         std::vector<std::vector<int>> curr_graph;
@@ -23,8 +20,8 @@ namespace ariel{
         this->curr_graph = givenGraph;
         this->vertices_count = givenGraph.size();
         int found_edges = 0;
-        for(int i=0; i < vertices_count; i++){
-            for(int j=0; j < vertices_count; j++){
+        for(vector<int>::size_type i=0; i < vertices_count; i++){
+            for(vector<int>::size_type j=0; j < vertices_count; j++){
                 curr_graph[i][j] = givenGraph[i][j];
                 if(curr_graph[i][j] != 0){
                     found_edges++;
@@ -36,7 +33,7 @@ namespace ariel{
     }
 
     void Graph::printGraph(){
-        int i=0, j=0;
+        vector<int>::size_type i=0, j=0;
         for(i=0; i < vertices_count-1; i++){
             cout << "{";
             for(j=0; j < vertices_count-1; j++){
@@ -48,17 +45,14 @@ namespace ariel{
         cout << "}" << endl;
     }
 
-    int Graph::getEdgesCount(){
-        return edges_count;
+    vector<int>::size_type Graph::getEdgesCount(){
+        return (vector<int>::size_type)edges_count;
     }
 
-    int Graph::getVerticesCount(){
-        return vertices_count;
+    vector<int>::size_type Graph::getVerticesCount(){
+        return (vector<int>::size_type)vertices_count;
     }
 
     int Graph::getGraphValue(int i, int j){
-        return (int)curr_graph[(int)i][(int)j];
+        return (int)curr_graph[(vector<int>::size_type)i][(vector<int>::size_type)j];
     }
-}
-
-#endif //GRAPH_H

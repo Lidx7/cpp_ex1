@@ -1,5 +1,7 @@
-#include "Graph.hpp"
+#ifndef ALGORITHMS_HPP
+#define ALGORITHMS_HPP
 
+#include "Graph.hpp"
 #include <iostream>
 #include <vector>
 
@@ -9,17 +11,19 @@ namespace ariel{
     class Algorithms{
         private:
             vector<vector<int>> curr_graph;
-            static void dfs(Graph g, int start, vector<bool> &visited);
-            static void bellmanFord(Graph g, int start, vector<int> &distances);
-            static bool hasLoopbacks(Graph g);
-            int minDistance(vector<int> distances, vector<bool> visited);
+            static void dfs(ariel::Graph g, int s, vector<bool> &visited);
+            static void bellmanFord(ariel::Graph g, int s, vector<int> &distances);
+            static bool hasLoopbacks(ariel::Graph g);
+            static int minDistance(vector<int> distances, vector<bool> visited);
             
         public:
             Algorithms();
-            static bool isConnected(Graph g);
-            static string shortestPath(Graph g, int start, int end);
-            static bool isContainsCycle(Graph g);
-            static string isBipartite(Graph g);
-            static string negativeCycle(Graph g);
+            static bool isConnected(ariel::Graph g);
+            static string shortestPath(ariel::Graph g, int s, int e);
+            static bool isContainsCycle(ariel::Graph g);
+            static string isBipartite(ariel::Graph g);
+            static string negativeCycle(ariel::Graph g);
     };
 }
+
+#endif
