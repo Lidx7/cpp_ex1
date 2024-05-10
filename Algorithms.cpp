@@ -20,14 +20,21 @@ using namespace ariel;
      *   Helper functions   *
      ************************/
 
-    void Algorithms::dfs(Graph g, int s, vector<bool> &visited){
+    bool Algorithms::dfs(Graph g, int s, vector<bool> &visited, vector<bool> &recStack){
         vector<int>::size_type start = (vector<int>::size_type)s;
-        visited[start] = true;
-        for(vector<int>::size_type i=0; i < g.getVerticesCount(); i++){
-            if(g.getGraphValue(start, i) != 0 && !visited[i]){
-                dfs(g, i, visited);
+        if (visited[start] == false){
+            visited[start] = true;
+            recStack[start] = true;
+            for(vector<int>::size_type i=0; i < g.getVerticesCount(); i++){
+                if(g.getGraphValue(start, i) != 0 && !visited[i] && dfs(g, i, visited, recStack)){
+                    return true;
+                }
+                else if(recStack[i]){
+                    return true;
+                }
             }
         }
+        return false;
     }
 
     //Please note that before calling the function for the first time, the "distances" vector should be initialized with the maximum possible value
@@ -72,7 +79,8 @@ using namespace ariel;
 
     bool Algorithms::isConnected(Graph g){
         vector<bool> visited = vector<bool>(g.getVerticesCount(), false);
-        dfs(g, 0, visited);
+        vector<bool> recStack = vector<bool>(g.getVerticesCount(), false);
+        dfs(g, 0, visited, recStack);
         for(vector<bool>::size_type i=0; i < g.getVerticesCount(); i++){
             if(!visited[i]){
                 return false;
@@ -123,14 +131,9 @@ using namespace ariel;
 
     bool Algorithms::isContainsCycle(Graph g){
         vector<bool> visited = vector<bool>(g.getVerticesCount(), false);
+        vector<bool> recStack = vector<bool>(g.getVerticesCount(), false);
         for(vector<bool>::size_type i=0; i < g.getVerticesCount(); i++){
-            if(!visited[i]){
-                dfs(g, i, visited); /*TODO: may need to fix the dfs function so it can detect if a 
-                                    currently visited vetics is already found (meaning breaking the taget
-                                    of this function into smaller target and integrate it into the dfs
-                                    function; could possibly need to make the dfs function a boolean type)*/
-            }
-            else{
+            if(!visited[i] && dfs(g, i, visited, recStack)){
                 return true;
             }
         }

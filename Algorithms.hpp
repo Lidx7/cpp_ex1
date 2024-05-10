@@ -11,7 +11,7 @@ namespace ariel{
     class Algorithms{
         private:
             vector<vector<int>> curr_graph;
-            static void dfs(ariel::Graph g, int s, vector<bool> &visited);
+            static bool dfs(ariel::Graph g, int s, vector<bool> &visited, vector<bool> &recStack);
             static void bellmanFord(ariel::Graph g, int s, vector<int> &distances);
             static bool hasLoopbacks(ariel::Graph g);
             static int minDistance(vector<int> distances, vector<bool> visited);
