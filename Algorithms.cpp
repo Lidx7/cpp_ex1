@@ -20,25 +20,43 @@ using namespace ariel;
      *   Helper functions   *
      ************************/
 
-    bool Algorithms::dfs(Graph g, int s, vector<bool> &visited, vector<bool> &recStack){
-        vector<int>::size_type start = (vector<int>::size_type)s;
-        if (visited[start] == false){
-            visited[start] = true;
-            recStack[start] = true;
-            for(vector<int>::size_type i=0; i < g.getVerticesCount(); i++){
-                if(g.getGraphValue(start, i) != 0 && !visited[i] && dfs(g, i, visited, recStack)){
+    /*TODO: change all the functions so that in the title there wouldnt be a parameter with single-character name
+    but instead a full name that explains what the varaiable does. additionally, the variables inside the function
+    that do have names but are just a type conversion, should have a single-character name*/
+
+    bool Algorithms::dfs(Graph& g, vector<int>::size_type current, vector<int>::size_type parent, vector<bool>& visited) {
+        visited[current] = true;
+
+        for (int neighbor : g.getNeighbors(current)) {
+            if (!visited[(vector<int>::size_type)neighbor]) {
+                if (dfs(g, (vector<int>::size_type)neighbor, current, visited)) {
                     return true;
                 }
-                else if(recStack[i]){
-                    return true;
-                }
+            } else if (neighbor != parent) {
+                return true;
             }
         }
+
         return false;
     }
 
+
+
+    void Algorithms::dfs(Graph& g, vector<bool>::size_type v, vector<bool>& visited) {
+        visited[v] = true;
+
+        // Visit all neighbors of vertex v
+        for (int neighbor : g.getNeighbors(v)) {
+            if (!visited[(vector<bool>::size_type)neighbor]) {
+                dfs(g, (vector<bool>::size_type)neighbor, visited);
+            }
+        }
+    }
+
+
+
     //Please note that before calling the function for the first time, the "distances" vector should be initialized with the maximum possible value
-    void Algorithms::bellmanFord(Graph g, int s, vector<int> &distances){ //TODO: check if "distances" should be a 2D vector
+    void Algorithms::bellmanFord(Graph g, int s, vector<int> &distances){ 
         vector<int>::size_type start = (vector<int>::size_type)s;
         distances[start] = 0;
         for(vector<int>::size_type i=0; i < g.getVerticesCount() - 1; i++){
@@ -77,18 +95,23 @@ using namespace ariel;
 /************************************************************************************************************************/
 
 
-    bool Algorithms::isConnected(Graph g){
-        vector<bool> visited = vector<bool>(g.getVerticesCount(), false);
-        vector<bool> recStack = vector<bool>(g.getVerticesCount(), false);
-        dfs(g, 0, visited, recStack);
-        for(vector<bool>::size_type i=0; i < g.getVerticesCount(); i++){
-            if(!visited[i]){
+    bool Algorithms::isConnected(Graph g) {
+        vector<bool> visited(g.getVerticesCount(), false);
+
+        // Perform DFS traversal starting from vertex 0
+        dfs(g, 0, visited);
+
+        // Check if all vertices are visited
+        for (bool v : visited) {
+            if (!v)
                 return false;
-            }
         }
 
         return true;
     }
+
+
+
 
     //TODO: make this function find the shortest path to "end" and not all vertices
     string Algorithms::shortestPath(Graph g, int s, int e){
@@ -129,11 +152,11 @@ using namespace ariel;
     }
 
 
-    bool Algorithms::isContainsCycle(Graph g){
-        vector<bool> visited = vector<bool>(g.getVerticesCount(), false);
-        vector<bool> recStack = vector<bool>(g.getVerticesCount(), false);
-        for(vector<bool>::size_type i=0; i < g.getVerticesCount(); i++){
-            if(!visited[i] && dfs(g, i, visited, recStack)){
+    bool Algorithms::isContainsCycle(Graph g) {
+        vector<bool> visited(g.getVerticesCount(), false);
+
+        for (vector<int>::size_type i = 0; i < g.getVerticesCount(); ++i) {
+            if (!visited[i] && dfs(g, i, 0, visited)) { // Start DFS from unvisited vertices
                 return true;
             }
         }

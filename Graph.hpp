@@ -20,6 +20,8 @@ namespace ariel{
             vector<int>::size_type getEdgesCount();
             vector<int>::size_type getVerticesCount();
             int getGraphValue(int i, int j);
+            vector<int> getNeighbors(int vertex);
+
 
     };
 }
