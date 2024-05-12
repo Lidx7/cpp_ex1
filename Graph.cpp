@@ -4,8 +4,7 @@ using namespace std;
 
 using namespace ariel;
 
-    Graph::Graph() : edges_count(0), vertices_count(0), curr_graph(){
-    }
+    Graph::Graph() : edges_count(0), vertices_count(0), curr_graph(), undirected(false){}
 
     void Graph::loadGraph(std::vector<std::vector<int>> given_graph){
         if(given_graph.empty()){
@@ -19,6 +18,7 @@ using namespace ariel;
         vertices_count = given_graph.size();
         int found_edges = 0;
         bool is_undirected = true;
+
         for(vector<int>::size_type i=0; i < vertices_count; i++){
             for(vector<int>::size_type j=0; j < vertices_count; j++){
                 curr_graph[i][j] = given_graph[i][j];
@@ -30,26 +30,29 @@ using namespace ariel;
                 }
             }
         }
+
         if(is_undirected){
             found_edges /= 2;
+            undirected = true;
         }
-        edges_count = found_edges;
 
+        edges_count = found_edges;
     }
 
     void Graph::printGraph(){
+        cout << "Graph with " << vertices_count << " vertices and " << edges_count << " edges." << endl;
+        
         vector<int>::size_type i=0, j=0;
-        ///////////////////////////////////// cout << "Graph with " << vertices_count << " vertices and " << edges_count << " edges." << endl;
-        cout << "{" << endl;
         for(i=0; i < vertices_count; i++){
             cout << "{";
+
             for(j=0; j < vertices_count-1; j++){
                 cout << curr_graph[i][j] << ", ";
             }
+
             cout << curr_graph[i][j+1];
             cout << "}," << endl;
         }
-        cout << "}" << endl;
     }
 
     vector<int>::size_type Graph::getEdgesCount(){
@@ -62,6 +65,10 @@ using namespace ariel;
 
     int Graph::getGraphValue(int i, int j){
         return (int)curr_graph[(vector<int>::size_type)i][(vector<int>::size_type)j];
+    }
+
+    bool Graph::getUndirected(){
+        return undirected;
     }
 
     vector<int> Graph::getNeighbors(int v) {

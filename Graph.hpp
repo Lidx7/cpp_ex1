@@ -12,6 +12,7 @@ namespace ariel{
             int edges_count;
             int vertices_count;
             vector<vector<int>> curr_graph;
+            bool undirected;
 
         public:
             Graph();
@@ -21,6 +22,7 @@ namespace ariel{
             vector<int>::size_type getVerticesCount();
             int getGraphValue(int i, int j);
             vector<int> getNeighbors(int vertex);
+            bool getUndirected();
 
 
     };
