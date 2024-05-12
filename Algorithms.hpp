@@ -1,3 +1,9 @@
+/*
+ * Author: Lidor Borofker.
+ * ID: 326065646
+ * e-Mail: Lidor.borofker@windowslive.com
+ */
+
 #ifndef ALGORITHMS_HPP
 #define ALGORITHMS_HPP
 
@@ -15,7 +21,7 @@ namespace ariel{
             static void bellmanFord(ariel::Graph g, vector<int>::size_type start, vector<int> &distances);
             static bool hasLoopbacks(ariel::Graph g);
             static int minDistance(vector<int> distances, vector<bool> visited);
-            static bool isCyclicConnected(vector<int> adj[], int start, vector<bool>::size_type vertex, vector<bool>& visited);
+            static bool isCyclicUndirected(vector<int> adj[], int start, vector<bool>::size_type vertex, vector<bool>& visited);
             
         public:
             Algorithms();

@@ -1,7 +1,10 @@
 /*
- * Demo program for Exercise 2.
- * Author: Benjamin Saldman.
+ * Author: Lidor Borofker.
+ * ID: 326065646
+ * e-Mail: Lidor.borofker@windowslive.com
+ * based on Benjamin Saldman's demo code
  */
+ 
 #include "Graph.hpp"
 #include "Algorithms.hpp"
 using ariel::Algorithms;

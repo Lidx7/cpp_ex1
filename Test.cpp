@@ -1,3 +1,10 @@
+/*
+ * Author: Lidor Borofker.
+ * ID: 326065646
+ * e-Mail: Lidor.borofker@windowslive.com
+ * based on the provided test file
+ */
+
 #include "doctest.h"
 #include "Algorithms.hpp"
 #include "Graph.hpp"

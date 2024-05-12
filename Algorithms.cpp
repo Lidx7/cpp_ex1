@@ -1,3 +1,8 @@
+/*
+ * Author: Lidor Borofker.
+ * ID: 326065646
+ * e-Mail: Lidor.borofker@windowslive.com
+ */
 
 #include "Algorithms.hpp"
 #include "Graph.hpp"
@@ -28,9 +33,6 @@ using namespace ariel;
 
         return true;
     }
-
-
-
 
     string Algorithms::shortestPath(Graph g, vector<int>::size_type start, vector<int>::size_type end) {
         vector<int> distances = vector<int>(g.getVerticesCount(), INT32_MAX);
@@ -69,8 +71,6 @@ using namespace ariel;
         return ans;
     }
 
-
-
     bool Algorithms::isContainsCycle(Graph g) {
         if(g.getUndirected()){
             vector<int> adj[g.getVerticesCount()];
@@ -84,7 +84,7 @@ using namespace ariel;
             vector<bool> visited(g.getVerticesCount(), false);
 
             for (vector<int>::size_type i = 0; i < g.getVerticesCount(); ++i) {
-                if (!visited[i] && isCyclicConnected(adj, i, g.getVerticesCount(), visited)) { 
+                if (!visited[i] && isCyclicUndirected(adj, i, g.getVerticesCount(), visited)) { 
                     return true;
                 }
             }
@@ -102,8 +102,7 @@ using namespace ariel;
         return false;
     }
 
-
-    bool Algorithms::isCyclicConnected(vector<int> adj[], int start, vector<bool>::size_type vertex, vector<bool>& visited){
+    bool Algorithms::isCyclicUndirected(vector<int> adj[], int start, vector<bool>::size_type vertex, vector<bool>& visited){
         queue<int> q;
 
         q.push(start);
@@ -124,9 +123,6 @@ using namespace ariel;
         }
         return false;
     }
-
-
-
 
     string Algorithms::isBipartite(Graph g){
         if(hasLoopbacks(g)){
@@ -149,12 +145,13 @@ using namespace ariel;
                         q.push(i);
                     }       
                     else if(g.getGraphValue(curr, i) && color[i] == color[curr]){ 
-                        return "0";
+                        return "0"; //The graph is not bipartite
                     }
                 }
             }
         }
-
+        
+        //printing the two sets
         string ans = "The graph is bipartite: A={";
         bool first = true;
         for(vector<int>::size_type i=0; i < g.getVerticesCount(); i++){
@@ -203,9 +200,9 @@ using namespace ariel;
     }
 
 
-    /************************
-     *   Helper functions   *
-     ************************/
+                                        /************************
+                                         *   Helper functions   *
+                                         ************************/
 
     bool Algorithms::dfs(Graph& g, vector<bool>::size_type v, int parent, vector<bool>& visited) {
         visited[v] = true;
@@ -234,6 +231,7 @@ using namespace ariel;
         }
     }
     
+    //cecks for loopbacks in the graph
     bool Algorithms::hasLoopbacks(Graph g){
         for(vector<int>::size_type i=0; i < g.getVerticesCount(); i++){
             if(g.getGraphValue(i, i) != 0){

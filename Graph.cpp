@@ -1,3 +1,9 @@
+/*
+ * Author: Lidor Borofker.
+ * ID: 326065646
+ * e-Mail: Lidor.borofker@windowslive.com
+ */
+
 #include "Graph.hpp"
 #include <iostream>
 using namespace std;
@@ -41,7 +47,7 @@ using namespace ariel;
 
     void Graph::printGraph(){
         cout << "Graph with " << vertices_count << " vertices and " << edges_count << " edges." << endl;
-        
+
         vector<int>::size_type i=0, j=0;
         for(i=0; i < vertices_count; i++){
             cout << "{";

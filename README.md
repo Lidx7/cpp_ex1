@@ -1,29 +1,94 @@
-# מטלה 1 - גרפים (Classes and Namespaces)
+# EX1 - Graphs
 
-המטרה שלכם במטלה הזאת היא ליצור מחלקה שמייצגת גרף ולממש אלגוריתמים על הגרפים (זה הזמן להזכר בקורס אלגוריתמים 1).
+This project initiates a graph (using adjacency matrix) and provides a handful of algorithms to use on the graph. the project is written in the C++ language. 
 
-במטלה הזאת הייצוג של הגרף שלכם יתבצע בעזרת מטריצת שכנויות - https://he.wikipedia.org/wiki/%D7%9E%D7%98%D7%A8%D7%99%D7%A6%D7%AA_%D7%A9%D7%9B%D7%A0%D7%95%D7%AA.
+## Algorithms
 
-הגרף יכול להיות גרף מכוון ולא מכוון וגם גרף ממושקל. מטריצת השכנויות חייבת להיות מטריצה ריבועית.
+The algorithms directory contains implementations of some helpful graph algorithms, including:
 
-עליכם לכתוב את הקבצים הבאים:
+isConnected(graph) - checks if the graph is connected using a simple dfs function and checking if the dfs got to all the vertices
+
+shortestPath(graph, start, end) - finds the shortest path on the graph from start to end by using simple dijkstra's implementation
+
+isContainsCycle(g) - checks if there are cycle(s) in the graph using dfs and checking for a backedge, or bfs in case of an undirected graph(using a helper function)
+
+negativeCycle(graph) - checks is there a negative cycle by running bellman-ford and checking if there is an edge that further decreases the distance of its destination vertex
+
+isBipartite(graph) - checks if the graph is bipartite by trying to 2-color the graph
+
+
+
+## Graph
+
+The graph directory contains classes and utilities for representing and working with graphs. These include:  
+
+loadGraph(vector<vector<int>>) - loads the graph into the given class instance, calculates the number of edges and vertices, and checks if the graph is undirected
+
+printGraph() - prints a simple representation of the graph
+
+getNeighbors(vertex) - returns the neighbors of a given vertex (used by some algorithms from the Algorithms directory)
+
+## Usage
+Here's a simple representation of how to use the namespace
+
+```c++
+#include "Graph.hpp"
+#include "Algorithms.hpp"
+using ariel::Algorithms;
+#include <iostream>
+#include <stdexcept>
+#include <vector>
+using namespace std;
+
+int main()
+{
+
+    ariel::Graph g;
+    vector<vector<int>> graph = {
+        {0, 1, 0},
+        {1, 0, 1},
+        {0, 1, 0}};
+    g.loadGraph(graph);
+
+    g.printGraph();                                    
+    cout << Algorithms::isConnected(g) << endl;        
+    cout << Algorithms::shortestPath(g, 0, 2) << endl; 
+    cout << Algorithms::isContainsCycle(g) << endl;    
+    cout << Algorithms::isBipartite(g) << endl;        
+
+
+    vector<vector<int>> graph2 = {
+        {0, 1, 1, 0, 0},
+        {1, 0, 1, 0, 0},
+        {1, 1, 0, 1, 0},
+        {0, 0, 1, 0, 0},
+        {0, 0, 0, 0, 0}};
+
+    g.loadGraph(graph2); 
+
+    g.printGraph();                                    
+    cout << Algorithms::isConnected(g) << endl;        
+    cout << Algorithms::shortestPath(g, 0, 4) << endl; 
+    cout << Algorithms::isContainsCycle(g) << endl;    
+    cout << Algorithms::isBipartite(g) << endl;        
+
+
+    vector<vector<int>> graph3 = {
+        {0, 1, 2, 0, 0},
+        {1, 0, 3, 0, 0},
+        {2, 3, 0, 4, 0},
+        {0, 0, 4, 0, 5},
+        {0, 0, 0, 5, 0}};
+    g.loadGraph(graph3); 
+
+    g.printGraph();                                    
+    cout << Algorithms::isConnected(g) << endl;        
+    cout << Algorithms::shortestPath(g, 0, 4) << endl; 
+    cout << Algorithms::isContainsCycle(g) << endl;    
+    cout << Algorithms::isBipartite(g) << endl;        
+
+   
+    return 0;
+}
 
 ```
-Graph.cpp
-Algorithms.cpp
-```
-
-הקובץ `Graph.cpp` מכיל מחלקה המייצגת גרף.
-המחלקה מכילה את הפעולות `loadGraph` המקבלת מטריצת שכנויות וטוענת אותה לתוך הגרף ו-`printGraph` שמדפיסה את הייצוג של הגרף (הפורמט לבחירתכם, ראו דוגמה ב-`Demo.cpp`).
-
-הקובץ `Algorithms.cpp` מכיל מימושים לאלגוריתמים על גרפים. ביניהם:
-
-- `isConnected(g)` - האלגוריתם מקבל גרף ומחזיר 1 אם הגרף קשיר (אחרת מחזיר 0).
-- `shortestPath(g,start,end)` - האלגוריתם מקבל גרף, קודקוד התחלה וקודקוד סיום ומחזיר את המסלול הקל ביותר (במקרה שהגרף לא ממושקל - הקצר ביותר) בין שני הקודקודים. במידה ואין מסלול כזה, האלגוריתם יחזיר -1.
-- `isContainsCycle(g)` - האלגוריתם מקבל גרף ומדפיס מעגל כלשהו. אם לא קיים מעגל בגרף, האלגוריתם יחזיר 0.
-- `isBipartite(g)` - האלגוריתם מקבל גרף ומחזיר את החלוקה של הגרף לגרף דו-צדדי. אם אי אפשר לחלק את הגרף, האלגוריתם יחזיר 0.
-- `negativeCycle(g)` - האלגוריתם מקבל גרף ומוצא מעגל שלילי (כלומר מעגל שסכום המשקלים של הצלעות שלילי). אם לא קיים מעגל כזה, האלגוריתם ידפיס שלא קיים מעגל שלילי.
-
-הקובץ `Demo.cpp` מכיל דוגמאות של קלטים ופלטים.
-עליכם לכתוב בתחילת כל קובץ את מספר תעודת הזהות שלכם ואת המייל. כמו כן, בנוסף לקבצים של המטלה אתם נדרשים להגיש גם קובץ README המתאר את אופן המימוש ואת החלוקה שביצעתם בקוד (סוג של מדריך משתמש). אי עמידה בהנחיות תגרור הפחתה בציון. בהצלחה!
-  
