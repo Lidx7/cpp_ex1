@@ -196,3 +196,47 @@ TEST_CASE("Test invalid graph")
     CHECK_THROWS(g.loadGraph(graph));
 }
 
+TEST_CASE("Test negativeCycle")
+{
+    ariel::Graph g;
+    vector<vector<int>> graph = {
+        {0, 1, 0},
+        {1, 0, 1},
+        {0, 1, 0}};
+    g.loadGraph(graph);
+    CHECK(ariel::Algorithms::negativeCycle(g) == "The graph does not have a negative cycle");
+    vector<vector<int>> graph2 = {
+        {0, 1, 1, 0, 0},
+        {1, 0, 1, 0, 0},
+        {1, 1, 0, 1, 0},
+        {0, 0, 1, 0, 0},
+        {0, 0, 0, 0, 0}};
+    g.loadGraph(graph2);
+    CHECK(ariel::Algorithms::negativeCycle(g) == "The graph does not have a negative cycle");
+    vector<vector<int>> graph3 = {
+        {0, 5, 0, 0, 0, 0, 0, 0}, 
+        {0, 0, 10, 5, 0, 0, 0, 0}, 
+        {0, 0, 0, 11, 0, 0, 0, 0}, 
+        {0, 8, 0, 0, 21, 0, 0, 0}, 
+        {0, 0, 0, 0, 0, 5, 0, 0}, 
+        {0, 0, 0, 0, 0, 0, 1, 0}, 
+        {0, 0, 0, 0, 0, 0, 0, 21}, 
+        {0, 0, 0, 0, 0, 8, 0, 0}};
+    g.loadGraph(graph3);
+    CHECK(ariel::Algorithms::negativeCycle(g) == "The graph does not have a negative cycle");
+    vector<vector<int>> graph5 = {
+        {0, 1, 0, 0, 0},
+        {1, 0, 3, 0, 0},
+        {0, 3, 0, 4, 0},
+        {0, 0, 4, 0, 5},
+        {0, 0, 0, 5, 0}};
+    g.loadGraph(graph5);
+    CHECK(ariel::Algorithms::negativeCycle(g) == "The graph does not have a negative cycle");
+    vector<vector<int>> graph6 = {
+        {0, 7, 0, 0}, 
+        {7, 0, 42, 0}, 
+        {0, 42, 0, -11}, 
+        {0, 0, -11, 0}};
+    g.loadGraph(graph6);
+    CHECK(ariel::Algorithms::negativeCycle(g) == "The graph contains a negative cycle");
+}

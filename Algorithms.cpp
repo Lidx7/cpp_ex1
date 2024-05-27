@@ -189,6 +189,7 @@ using namespace ariel;
 
         for(vector<int>::size_type i=0; i < g.getVerticesCount(); i++){
             for(vector<int>::size_type j=0; j < g.getVerticesCount(); j++){
+                bellmanFord(g, 0, distances);
                 if(g.getGraphValue(i, j) != 0 && distances[j] > distances[i] + g.getGraphValue(i, j)){
                     return "The graph contains a negative cycle";
                     
@@ -220,16 +221,23 @@ using namespace ariel;
 
 
     //Please note that before calling the function for the first time, the "distances" vector should be initialized with the maximum possible value
-    void Algorithms::bellmanFord(Graph g, vector<int>::size_type start, vector<int> &distances){ 
+    void Algorithms::bellmanFord(Graph g, vector<int>::size_type start, vector<int> &distances){
+        int V = g.getVerticesCount();
         distances[start] = 0;
-        for(vector<int>::size_type i=0; i < g.getVerticesCount() - 1; i++){
-            for(vector<int>::size_type j=0; j < g.getEdgesCount(); j++){
-                if(g.getGraphValue(i, j) != 0 && distances[j] > distances[i] + g.getGraphValue(i, j)){
-                    distances[j] = distances[i] + g.getGraphValue(i, j);
+
+        // Relax edges V-1 times
+        for (vector<int>::size_type i = 1; i < V; ++i) {
+            for (vector<int>::size_type u = 0; u < V; ++u) {
+                for (vector<int>::size_type v = 0; v < V; ++v) {
+                    int weight = g.getGraphValue(u, v);
+                    if (weight != 0 && distances[u] != INT32_MAX && distances[u] + weight < distances[v]) {
+                        distances[v] = distances[u] + weight;
+                    }
                 }
             }
         }
     }
+    
     
     //cecks for loopbacks in the graph
     bool Algorithms::hasLoopbacks(Graph g){
